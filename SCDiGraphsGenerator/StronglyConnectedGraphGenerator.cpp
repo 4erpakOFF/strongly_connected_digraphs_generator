@@ -219,7 +219,7 @@ std::vector<AdjacencyMatrix> Generator::generateSubgraphs(size_t numOfGraphs)
 std::vector<size_t> Generator::generateNewLabelsForV(AdjacencyMatrix basicMatrix, AdjacencyMatrix additionalMatrix,
 													 size_t basicI, size_t basicJ, size_t addI, size_t addJ)
 {
-	std::vector<size_t> result;                  // ìàññèâ ïîêàçûââàåò, êàêèå áóäóò íîìåðà âåðøèí âòîðîãî ãðàôà â ðåçóëüòèðóþùåì ãðàôå
+	std::vector<size_t> result;                  // массив показыввает, какие будут номера вершин второго графа в результирующем графе
 	result.resize(additionalMatrix.size());
 	for (size_t i = 0; i < result.size(); i++)
 	{
@@ -238,7 +238,7 @@ std::vector<size_t> Generator::generateNewLabelsForV(AdjacencyMatrix basicMatrix
 	return result;
 }
 
-//Ïåðâûé àðãóìåíò ÿâëÿåòñÿ êàê êàê äîáàâëÿåìîé ìàòðèöåé, òàê è ðåçóëüòèðóþùåé.
+// Первый аргумент является как как добавляемой матрицей, так и результирующей.
 void Generator::connectTwoGraphsByEdge(AdjacencyMatrix& resultMatrix, AdjacencyMatrix& additionalMatrix,
 												std::vector<std::vector<size_t>>& InducedSubgraphs)
 {
@@ -262,17 +262,17 @@ void Generator::connectTwoGraphsByEdge(AdjacencyMatrix& resultMatrix, AdjacencyM
 	if (!findEdge(addI, addJ, additionalMatrix))
 		exit(1);
 
-	//ïðîâåðÿåì ïðîòèâîïîëîæíîå íàïðàâëåíèå, è ïðè íåîáõîäèìîñòè äîáàâëÿåì äóãó â ýòîì íàïðàâëåíèè,
-	//÷òîáû âïîñëåäñòâèè ïðè ðàçáèåíèè íà ïîðîæäåííûå ïîäãðàôû, îíè áûëè ñèëüíî ñâÿçíûìè.
+	//проверяем противоположное направление, и при необходимости добавляем дугу в этом направлении,
+	//чтобы впоследствии при разбиении на порожденные подграфы, они были сильно связными.
 	if (resultMatrix[resJ][resI] == 1 && additionalMatrix[addJ][addI] == 0)
 		AddEdge(additionalMatrix, addJ, addI);
 	else if (resultMatrix[resJ][resI] == 0 && additionalMatrix[addJ][addI] == 1)
 		AddEdge(resultMatrix, resJ, resI);
 
-	// ìàññèâ ïîêàçûââàåò, êàêèå áóäóò íîìåðà âåðøèí âòîðîãî ãðàôà â ðåçóëüòèðóþùåì ãðàôå
+	// массив показыввает, какие будут номера вершин второго графа в результирующем графе
 	std::vector<size_t> newLabels = generateNewLabelsForV(resultMatrix, additionalMatrix, resI, resJ, addI, addJ);
 
-	size_t newSize = resultMatrix.size() + additionalMatrix.size() - 2;   // -2 - ïîòîìó ÷òî 2 âåðøèíû âòîðîãî ãðàôà ñîåäèíÿòñÿ ñ âåðøèíàìè ïåðâîãî
+	size_t newSize = resultMatrix.size() + additionalMatrix.size() - 2;   	// -2 - потому что 2 вершины второго графа соединятся с вершинами первого
 	resultMatrix.resize(newSize);
 	for (size_t i = 0; i < resultMatrix.size(); i++)
 		resultMatrix[i].resize(resultMatrix.size());
@@ -300,7 +300,7 @@ GraphAndInduced Generator::connectAllSubgraphs(std::vector<AdjacencyMatrix> vect
 		size_t capacity = 0;
 		for (size_t i = 0; i < vectorOfSubgraphs.size(); i++)
 			capacity += vectorOfSubgraphs[i].size() - 2;
-		resultMatrix.reserve(capacity);								//âûäåëèëè íóæíûé ðàçìåð ïîä ðåçóëüòèðóþùóþ ìàòðèöó
+		resultMatrix.reserve(capacity);						//выделили нужный размер под результирующую матрицу
 
 		for (size_t i = 0; i < vectorOfSubgraphs.size(); i++)
 		{
@@ -316,7 +316,7 @@ GraphAndInduced Generator::connectAllSubgraphs(std::vector<AdjacencyMatrix> vect
 GraphAndInduced Generator::generateGraphAndInducedSubgraphs(size_t minNumOfSubgraphs, size_t maxNumOfSubgraphs, 
 															size_t minSize, size_t maxSize)
 {
-	//èñêëþ÷àåì ÷àñòü îøèáîê ââîäà íåâåðíîãî äèàïàçîíà
+	// исключаем часть ошибок ввода неверного диапазона
 	size_t minNum = minNumOfSubgraphs < maxNumOfSubgraphs ? minNumOfSubgraphs : maxNumOfSubgraphs;
 	size_t maxNum = maxNumOfSubgraphs > minNumOfSubgraphs ? maxNumOfSubgraphs : minNumOfSubgraphs;
 	size_t min = minSize < maxSize ? minSize : maxSize;
@@ -335,7 +335,7 @@ GraphAndInduced Generator::generateGraphAndInducedSubgraphs(size_t numOfSubgraph
 }
 
 //-----------------------------------------------------------------------------------------------------------------
-// Ñòàðûå íàðàáîòêè:
+// Старые наработки:
 
 bool Generator::oldIsStronglyConnected(AdjacencyMatrix matrix)
 {
