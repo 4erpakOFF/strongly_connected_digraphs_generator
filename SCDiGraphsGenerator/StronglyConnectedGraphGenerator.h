@@ -5,7 +5,7 @@
 #include <math.h>
 #include <random>
 #include <ctime>
-//кек
+
 // Strongly Connected Digraphs
 namespace SCDiGraphs  
 {
