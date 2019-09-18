@@ -1,4 +1,4 @@
-# Strongly Connected Digraph Generator
+# Strongly Connected Digraphs Generator
 Генератор случайных сильно связанных графов. Представляет их в виде матрицы смежности.    
 Работает в двух режимах:  
 1) generateSimpleGraph(...) - генерирует обычный сильно связанный граф.   
