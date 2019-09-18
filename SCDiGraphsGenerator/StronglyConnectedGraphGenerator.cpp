@@ -79,7 +79,7 @@ size_t Generator::getNumOfEdges(AdjacencyMatrix matrix)
 	return counter;
 }
 
-bool Generator::findEdge(size_t& startI, size_t& startJ, AdjacencyMatrix matrix)		//Начиная с указанного элемента, ищет какую-нибудь дугу
+bool Generator::findEdge(size_t& startI, size_t& startJ, AdjacencyMatrix matrix)		//РќР°С‡РёРЅР°СЏ СЃ СѓРєР°Р·Р°РЅРЅРѕРіРѕ СЌР»РµРјРµРЅС‚Р°, РёС‰РµС‚ РєР°РєСѓСЋ-РЅРёР±СѓРґСЊ РґСѓРіСѓ
 {
 	size_t i = startI, j = startJ;
 	do
@@ -110,8 +110,8 @@ void Generator::randomizeVertecies(size_t& fromV, size_t& toV, size_t currentGra
 		toV = distr(gen);
 }
 
-// Недостаток алгоритма в том, что он всегда предполагает существование дуги 0 -> 1.
-//Отчасти нивелируется тем, что при объединении с другими графами выбирается случайная дуга.
+// РќРµРґРѕСЃС‚Р°С‚РѕРє Р°Р»РіРѕСЂРёС‚РјР° РІ С‚РѕРј, С‡С‚Рѕ РѕРЅ РІСЃРµРіРґР° РїСЂРµРґРїРѕР»Р°РіР°РµС‚ СЃСѓС‰РµСЃС‚РІРѕРІР°РЅРёРµ РґСѓРіРё 0 -> 1.
+// РћС‚С‡Р°СЃС‚Рё РЅРёРІРµР»РёСЂСѓРµС‚СЃСЏ С‚РµРј, С‡С‚Рѕ РїСЂРё РѕР±СЉРµРґРёРЅРµРЅРёРё СЃ РґСЂСѓРіРёРјРё РіСЂР°С„Р°РјРё РІС‹Р±РёСЂР°РµС‚СЃСЏ СЃР»СѓС‡Р°Р№РЅР°СЏ РґСѓРіР°.
 AdjacencyMatrix Generator::generateSimpleGraph(size_t size, double factorMultiplier)
 {
 	AdjacencyMatrix matrix;
@@ -135,18 +135,18 @@ AdjacencyMatrix Generator::generateSimpleGraph(size_t size, double factorMultipl
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	std::uniform_int_distribution<size_t> distr(2, size);
-	size_t cycleSize = distr(gen);			// Размер цикличного уха. Минимальный == 2
-	for (size_t i = 0; i < cycleSize - 1; i++)			//создание цикличного уха
+	size_t cycleSize = distr(gen);			// Р Р°Р·РјРµСЂ С†РёРєР»РёС‡РЅРѕРіРѕ СѓС…Р°. РњРёРЅРёРјР°Р»СЊРЅС‹Р№ == 2
+	for (size_t i = 0; i < cycleSize - 1; i++)			//СЃРѕР·РґР°РЅРёРµ С†РёРєР»РёС‡РЅРѕРіРѕ СѓС…Р°
 		AddEdge(matrix, i, i + 1);
 	AddEdge(matrix, cycleSize - 1, 0);
 
-	//Далее идет добавление остальных ушей
+	//Р”Р°Р»РµРµ РёРґРµС‚ РґРѕР±Р°РІР»РµРЅРёРµ РѕСЃС‚Р°Р»СЊРЅС‹С… СѓС€РµР№
 
-	//чем выше коэффициент, тем больше возможных итераций при создании новых дуг. Не до конца отлажен.
+	// Р§РµРј РІС‹С€Рµ РєРѕСЌС„С„РёС†РёРµРЅС‚, С‚РµРј Р±РѕР»СЊС€Рµ РІРѕР·РјРѕР¶РЅС‹С… РёС‚РµСЂР°С†РёР№ РїСЂРё СЃРѕР·РґР°РЅРёРё РЅРѕРІС‹С… РґСѓРі.
 	size_t terminationSparsityFactor = (size_t)(3 * size * fabs(factorMultiplier));
 	std::uniform_int_distribution<size_t> terminationDistr(0, terminationSparsityFactor - 1);
 	
-	//Критерий прекращения генерации новых дуг. Зависит от уже добавленных вершин и от factorMultiplier
+	// РљСЂРёС‚РµСЂРёР№ РїСЂРµРєСЂР°С‰РµРЅРёСЏ РіРµРЅРµСЂР°С†РёРё РЅРѕРІС‹С… РґСѓРі. Р—Р°РІРёСЃРёС‚ РѕС‚ СѓР¶Рµ РґРѕР±Р°РІР»РµРЅРЅС‹С… РІРµСЂС€РёРЅ Рё РѕС‚ factorMultiplier
 	bool terminationCriteria = false;					
 	size_t currentGraphSize = cycleSize;
 
@@ -171,7 +171,7 @@ AdjacencyMatrix Generator::generateSimpleGraph(size_t size, double factorMultipl
 		AddEdge(matrix, fromV, toV);
 		currentGraphSize += numOfNewV;
 		terminationCriteria = currentGraphSize == size && terminationDistr(gen) == 0;
-		//выход из цикла <=> будут добавлены все вершины, и из набора случайных чисел [0..(terminationSparsityFactor-1)] выпадет 0.
+		//РІС‹С…РѕРґ РёР· С†РёРєР»Р° <=> Р±СѓРґСѓС‚ РґРѕР±Р°РІР»РµРЅС‹ РІСЃРµ РІРµСЂС€РёРЅС‹, Рё РёР· РЅР°Р±РѕСЂР° СЃР»СѓС‡Р°Р№РЅС‹С… С‡РёСЃРµР» [0..(terminationSparsityFactor-1)] РІС‹РїР°РґРµС‚ 0.
 	}
 
 	std::cerr << "Strongly connected graph of " << size<< " vertices and " << getNumOfEdges(matrix)<< " edges is generated." << std::endl;
@@ -219,7 +219,7 @@ std::vector<AdjacencyMatrix> Generator::generateSubgraphs(size_t numOfGraphs)
 std::vector<size_t> Generator::generateNewLabelsForV(AdjacencyMatrix basicMatrix, AdjacencyMatrix additionalMatrix,
 													 size_t basicI, size_t basicJ, size_t addI, size_t addJ)
 {
-	std::vector<size_t> result;                  // массив показыввает, какие будут номера вершин второго графа в результирующем графе
+	std::vector<size_t> result;                  // Г¬Г Г±Г±ГЁГў ГЇГ®ГЄГ Г§Г»ГўГўГ ГҐГІ, ГЄГ ГЄГЁГҐ ГЎГіГ¤ГіГІ Г­Г®Г¬ГҐГ°Г  ГўГҐГ°ГёГЁГ­ ГўГІГ®Г°Г®ГЈГ® ГЈГ°Г ГґГ  Гў Г°ГҐГ§ГіГ«ГјГІГЁГ°ГіГѕГ№ГҐГ¬ ГЈГ°Г ГґГҐ
 	result.resize(additionalMatrix.size());
 	for (size_t i = 0; i < result.size(); i++)
 	{
@@ -238,7 +238,7 @@ std::vector<size_t> Generator::generateNewLabelsForV(AdjacencyMatrix basicMatrix
 	return result;
 }
 
-//Первый аргумент является как как добавляемой матрицей, так и результирующей.
+//ГЏГҐГ°ГўГ»Г© Г Г°ГЈГіГ¬ГҐГ­ГІ ГїГўГ«ГїГҐГІГ±Гї ГЄГ ГЄ ГЄГ ГЄ Г¤Г®ГЎГ ГўГ«ГїГҐГ¬Г®Г© Г¬Г ГІГ°ГЁГ¶ГҐГ©, ГІГ ГЄ ГЁ Г°ГҐГ§ГіГ«ГјГІГЁГ°ГіГѕГ№ГҐГ©.
 void Generator::connectTwoGraphsByEdge(AdjacencyMatrix& resultMatrix, AdjacencyMatrix& additionalMatrix,
 												std::vector<std::vector<size_t>>& InducedSubgraphs)
 {
@@ -262,17 +262,17 @@ void Generator::connectTwoGraphsByEdge(AdjacencyMatrix& resultMatrix, AdjacencyM
 	if (!findEdge(addI, addJ, additionalMatrix))
 		exit(1);
 
-	//проверяем противоположное направление, и при необходимости добавляем дугу в этом направлении,
-	//чтобы впоследствии при разбиении на порожденные подграфы, они были сильно связными.
+	//ГЇГ°Г®ГўГҐГ°ГїГҐГ¬ ГЇГ°Г®ГІГЁГўГ®ГЇГ®Г«Г®Г¦Г­Г®ГҐ Г­Г ГЇГ°Г ГўГ«ГҐГ­ГЁГҐ, ГЁ ГЇГ°ГЁ Г­ГҐГ®ГЎГµГ®Г¤ГЁГ¬Г®Г±ГІГЁ Г¤Г®ГЎГ ГўГ«ГїГҐГ¬ Г¤ГіГЈГі Гў ГЅГІГ®Г¬ Г­Г ГЇГ°Г ГўГ«ГҐГ­ГЁГЁ,
+	//Г·ГІГ®ГЎГ» ГўГЇГ®Г±Г«ГҐГ¤Г±ГІГўГЁГЁ ГЇГ°ГЁ Г°Г Г§ГЎГЁГҐГ­ГЁГЁ Г­Г  ГЇГ®Г°Г®Г¦Г¤ГҐГ­Г­Г»ГҐ ГЇГ®Г¤ГЈГ°Г ГґГ», Г®Г­ГЁ ГЎГ»Г«ГЁ Г±ГЁГ«ГјГ­Г® Г±ГўГїГ§Г­Г»Г¬ГЁ.
 	if (resultMatrix[resJ][resI] == 1 && additionalMatrix[addJ][addI] == 0)
 		AddEdge(additionalMatrix, addJ, addI);
 	else if (resultMatrix[resJ][resI] == 0 && additionalMatrix[addJ][addI] == 1)
 		AddEdge(resultMatrix, resJ, resI);
 
-	// массив показыввает, какие будут номера вершин второго графа в результирующем графе
+	// Г¬Г Г±Г±ГЁГў ГЇГ®ГЄГ Г§Г»ГўГўГ ГҐГІ, ГЄГ ГЄГЁГҐ ГЎГіГ¤ГіГІ Г­Г®Г¬ГҐГ°Г  ГўГҐГ°ГёГЁГ­ ГўГІГ®Г°Г®ГЈГ® ГЈГ°Г ГґГ  Гў Г°ГҐГ§ГіГ«ГјГІГЁГ°ГіГѕГ№ГҐГ¬ ГЈГ°Г ГґГҐ
 	std::vector<size_t> newLabels = generateNewLabelsForV(resultMatrix, additionalMatrix, resI, resJ, addI, addJ);
 
-	size_t newSize = resultMatrix.size() + additionalMatrix.size() - 2;   // -2 - потому что 2 вершины второго графа соединятся с вершинами первого
+	size_t newSize = resultMatrix.size() + additionalMatrix.size() - 2;   // -2 - ГЇГ®ГІГ®Г¬Гі Г·ГІГ® 2 ГўГҐГ°ГёГЁГ­Г» ГўГІГ®Г°Г®ГЈГ® ГЈГ°Г ГґГ  Г±Г®ГҐГ¤ГЁГ­ГїГІГ±Гї Г± ГўГҐГ°ГёГЁГ­Г Г¬ГЁ ГЇГҐГ°ГўГ®ГЈГ®
 	resultMatrix.resize(newSize);
 	for (size_t i = 0; i < resultMatrix.size(); i++)
 		resultMatrix[i].resize(resultMatrix.size());
@@ -300,7 +300,7 @@ GraphAndInduced Generator::connectAllSubgraphs(std::vector<AdjacencyMatrix> vect
 		size_t capacity = 0;
 		for (size_t i = 0; i < vectorOfSubgraphs.size(); i++)
 			capacity += vectorOfSubgraphs[i].size() - 2;
-		resultMatrix.reserve(capacity);								//выделили нужный размер под результирующую матрицу
+		resultMatrix.reserve(capacity);								//ГўГ»Г¤ГҐГ«ГЁГ«ГЁ Г­ГіГ¦Г­Г»Г© Г°Г Г§Г¬ГҐГ° ГЇГ®Г¤ Г°ГҐГ§ГіГ«ГјГІГЁГ°ГіГѕГ№ГіГѕ Г¬Г ГІГ°ГЁГ¶Гі
 
 		for (size_t i = 0; i < vectorOfSubgraphs.size(); i++)
 		{
@@ -316,7 +316,7 @@ GraphAndInduced Generator::connectAllSubgraphs(std::vector<AdjacencyMatrix> vect
 GraphAndInduced Generator::generateGraphAndInducedSubgraphs(size_t minNumOfSubgraphs, size_t maxNumOfSubgraphs, 
 															size_t minSize, size_t maxSize)
 {
-	//исключаем часть ошибок ввода неверного диапазона
+	//ГЁГ±ГЄГ«ГѕГ·Г ГҐГ¬ Г·Г Г±ГІГј Г®ГёГЁГЎГ®ГЄ ГўГўГ®Г¤Г  Г­ГҐГўГҐГ°Г­Г®ГЈГ® Г¤ГЁГ ГЇГ Г§Г®Г­Г 
 	size_t minNum = minNumOfSubgraphs < maxNumOfSubgraphs ? minNumOfSubgraphs : maxNumOfSubgraphs;
 	size_t maxNum = maxNumOfSubgraphs > minNumOfSubgraphs ? maxNumOfSubgraphs : minNumOfSubgraphs;
 	size_t min = minSize < maxSize ? minSize : maxSize;
@@ -335,7 +335,7 @@ GraphAndInduced Generator::generateGraphAndInducedSubgraphs(size_t numOfSubgraph
 }
 
 //-----------------------------------------------------------------------------------------------------------------
-// Старые наработки:
+// Г‘ГІГ Г°Г»ГҐ Г­Г Г°Г ГЎГ®ГІГЄГЁ:
 
 bool Generator::oldIsStronglyConnected(AdjacencyMatrix matrix)
 {
