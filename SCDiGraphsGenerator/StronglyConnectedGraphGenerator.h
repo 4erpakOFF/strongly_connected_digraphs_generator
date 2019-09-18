@@ -19,18 +19,18 @@ namespace SCDiGraphs
 		static void print(GraphAndInduced);
 		static void print(AdjacencyMatrix);
 
-		// Полурабочее решение. Еще и долгое. 
-		// Выдаст true, даже если матрица задает несколько независимых друг от друга сильно связных графа.
-		// Необходимо переделать.
+		// РџРѕР»СѓСЂР°Р±РѕС‡РµРµ СЂРµС€РµРЅРёРµ. Р•С‰Рµ Рё РґРѕР»РіРѕРµ. 
+		// Р’С‹РґР°СЃС‚ true, РґР°Р¶Рµ РµСЃР»Рё РјР°С‚СЂРёС†Р° Р·Р°РґР°РµС‚ РЅРµСЃРєРѕР»СЊРєРѕ РЅРµР·Р°РІРёСЃРёРјС‹С… РґСЂСѓРі РѕС‚ РґСЂСѓРіР° СЃРёР»СЊРЅРѕ СЃРІСЏР·РЅС‹С… РіСЂР°С„Р°.
+		// РќРµРѕР±С…РѕРґРёРјРѕ РїРµСЂРµРґРµР»Р°С‚СЊ.
 		static bool isStronglyConnected(AdjacencyMatrix matrix);   
 		static bool isStronglyConnected(GraphAndInduced pair);
 
 		static AdjacencyMatrix generateSimpleGraph(size_t size, double factorMultiplier);
 		static AdjacencyMatrix generateSimpleGraph(size_t size);
 
-		// Генерирует пару: 
-		// First:  сильно связанный граф, который разбивается на указанное число порожденных сильно связанных подграфов
-		// Second: Набор сильно связанных подграфов, представденных в виде входящих в них вершин
+		// Р“РµРЅРµСЂРёСЂСѓРµС‚ РїР°СЂСѓ: 
+		// First:  СЃРёР»СЊРЅРѕ СЃРІСЏР·Р°РЅРЅС‹Р№ РіСЂР°С„, РєРѕС‚РѕСЂС‹Р№ СЂР°Р·Р±РёРІР°РµС‚СЃСЏ РЅР° СѓРєР°Р·Р°РЅРЅРѕРµ С‡РёСЃР»Рѕ РїРѕСЂРѕР¶РґРµРЅРЅС‹С… СЃРёР»СЊРЅРѕ СЃРІСЏР·Р°РЅРЅС‹С… РїРѕРґРіСЂР°С„РѕРІ
+		// Second: РќР°Р±РѕСЂ СЃРёР»СЊРЅРѕ СЃРІСЏР·Р°РЅРЅС‹С… РїРѕРґРіСЂР°С„РѕРІ, РїСЂРµРґСЃС‚Р°РІРґРµРЅРЅС‹С… РІ РІРёРґРµ РІС…РѕРґСЏС‰РёС… РІ РЅРёС… РІРµСЂС€РёРЅ
 		static GraphAndInduced generateGraphAndInducedSubgraphs(size_t minNumOfSubgr, size_t maxNumOfSubgr, size_t minSize, size_t maxSize);
 		static GraphAndInduced generateGraphAndInducedSubgraphs(size_t numOfSubgraphs, size_t minSize, size_t maxSize);
 		static GraphAndInduced generateGraphAndInducedSubgraphs(size_t numOfSubgraphs, size_t Size);
@@ -42,7 +42,7 @@ namespace SCDiGraphs
 		static size_t getNumOfEdges(AdjacencyMatrix matrix);
 		static bool findEdge(size_t& startI, size_t& startJ, AdjacencyMatrix matrix);
 
-		// Инициализирует переменные случайными значениями вершин, уже добавленных в рассматриваемый граф
+		// РРЅРёС†РёР°Р»РёР·РёСЂСѓРµС‚ РїРµСЂРµРјРµРЅРЅС‹Рµ СЃР»СѓС‡Р°Р№РЅС‹РјРё Р·РЅР°С‡РµРЅРёСЏРјРё РІРµСЂС€РёРЅ, СѓР¶Рµ РґРѕР±Р°РІР»РµРЅРЅС‹С… РІ СЂР°СЃСЃРјР°С‚СЂРёРІР°РµРјС‹Р№ РіСЂР°С„
 		static void randomizeVertecies(size_t& fromV, size_t& toV, size_t currentGraphSize);
 
 		static std::vector<AdjacencyMatrix> generateSubgraphs(size_t minNum, size_t maxNum, size_t minSize, size_t maxSize);
@@ -50,23 +50,23 @@ namespace SCDiGraphs
 		static std::vector<AdjacencyMatrix> generateSubgraphs(size_t numOfGraphs, size_t size);
 		static std::vector<AdjacencyMatrix> generateSubgraphs(size_t numOfGraphs);
 
-		//генерирует список, который показыввает, куда сместятся вершины второго графа в результирующем графе:
-		// "array[0] = 3" значит, что вершина "0" станет называться "3".
+		// Р“РµРЅРµСЂРёСЂСѓРµС‚ СЃРїРёСЃРѕРє, РєРѕС‚РѕСЂС‹Р№ РїРѕРєР°Р·С‹РІРІР°РµС‚, РєСѓРґР° СЃРјРµСЃС‚СЏС‚СЃСЏ РІРµСЂС€РёРЅС‹ РІС‚РѕСЂРѕРіРѕ РіСЂР°С„Р° РІ СЂРµР·СѓР»СЊС‚РёСЂСѓСЋС‰РµРј РіСЂР°С„Рµ:
+		// "array[0] = 3" Р·РЅР°С‡РёС‚, С‡С‚Рѕ РІРµСЂС€РёРЅР° "0" СЃС‚Р°РЅРµС‚ РЅР°Р·С‹РІР°С‚СЊСЃСЏ "3".
 		static  std::vector<size_t> generateNewLabelsForV(AdjacencyMatrix basicMatrix, AdjacencyMatrix additionalMatrix, 
 															size_t basicI, size_t basicJ, 
 															size_t addI, size_t addJ);
 
-		// Объединяет два графа по дуге, добавляя при необходимости второе направление (чтобы можно было разбить на порожденные подграфы).
+		/// РћР±СЉРµРґРёРЅСЏРµС‚ РґРІР° РіСЂР°С„Р° РїРѕ РґСѓРіРµ, РґРѕР±Р°РІР»СЏСЏ РїСЂРё РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё РІС‚РѕСЂРѕРµ РЅР°РїСЂР°РІР»РµРЅРёРµ (С‡С‚РѕР±С‹ РјРѕР¶РЅРѕ Р±С‹Р»Рѕ СЂР°Р·Р±РёС‚СЊ РЅР° РїРѕСЂРѕР¶РґРµРЅРЅС‹Рµ РїРѕРґРіСЂР°С„С‹).
 		static void connectTwoGraphsByEdge(AdjacencyMatrix& resultMatrix, AdjacencyMatrix& additionalMatrix,
 										   std::vector<std::vector<size_t>>& EmptyListOfStronglyConnectedInducedSubgraphs);
 
 		static GraphAndInduced connectAllSubgraphs(std::vector<AdjacencyMatrix> vectorOfSubgraphs);
 
 
-		// Старые наработки:
+		// РЎС‚Р°СЂС‹Рµ РЅР°СЂР°Р±РѕС‚РєРё:
 
-		void justTest(int num, int min, int max);    // просто тестовая функция
+		void justTest(int num, int min, int max); 
 		bool oldIsStronglyConnected(AdjacencyMatrix matrix);
-		AdjacencyMatrix oldGeneration(int size);   // наработки предыдущей версии генератора.
+		AdjacencyMatrix oldGeneration(int size);   // РЅР°СЂР°Р±РѕС‚РєРё РїСЂРµРґС‹РґСѓС‰РµР№ РІРµСЂСЃРёРё РіРµРЅРµСЂР°С‚РѕСЂР°.
 	};
 }
